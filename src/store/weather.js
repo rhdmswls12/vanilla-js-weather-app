@@ -195,7 +195,7 @@ export const searchWeather = async () => {
   if (copiedItems[5]['category'] == 'VEC') {
     copiedItems[5]['obsrValue'] += ' deg'
   }
-  if (copiedItems[6]['category'] == ' VVV') {
+  if (copiedItems[6]['category'] == 'VVV') {
     copiedItems[6]['obsrValue'] += ' m/s'
   }
   if (copiedItems[7]['category'] == 'WSD') {
