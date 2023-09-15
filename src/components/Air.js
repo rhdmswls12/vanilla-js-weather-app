@@ -19,7 +19,7 @@ export default class Air extends Component {
       <div class="air-information">
         <div class="title">
           <span>${weatherStore.state.sidoName}</span>
-          의 미세먼지 농도
+          미세먼지 농도
         </div>
         <div class="value">${weatherStore.state.airState} <span>${weatherStore.state.air}</span></div>
       </div>

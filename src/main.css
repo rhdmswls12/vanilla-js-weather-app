@@ -131,12 +131,11 @@ header {
   color: var(--color-white-50);
   font-family: 'Oswald', sans-serif;
   font-size: 20px;
-  font-weight: 700;
 }
 .air .air-information .title span{
-  color: var(--color-hover);
   font-family: 'Oswald', sans-serif;
-  font-size: 20px;
+  color: var(--color-white);
+  font-size: 25px;
   font-weight: 700;
 }
 .air .air-information .value {
