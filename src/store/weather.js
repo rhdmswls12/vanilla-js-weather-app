@@ -112,7 +112,7 @@ export const searchWeather = async () => {
   let ny = rs['y']
   console.log(nx, ny)
   
-  const serviceKey = '6o3Wnt66GnG4n3tCN3ZgU7%2FNXUVbDtADL61rtkIrjAZxeiLTbYT9eGlB62yqp4Zw6LdshmB4JdaoDhYYAdeBiA%3D%3D'
+  const serviceKey = '6o3Wnt66GnG4n3tCN3ZgU7/NXUVbDtADL61rtkIrjAZxeiLTbYT9eGlB62yqp4Zw6LdshmB4JdaoDhYYAdeBiA=='
 
   // 미세먼지 API
   const urlForAir = 'http://apis.data.go.kr/B552584/ArpltnInforInqireSvc/getCtprvnRltmMesureDnsty?'
@@ -139,7 +139,9 @@ export const searchWeather = async () => {
   
   let baseTime = time + '00'
   const res = await fetch(`${url}?serviceKey=${serviceKey}&dataType=json&numOfRows=10&pageNo=1&base_date=${dateFormat}&base_time=${baseTime}&nx=${nx}&ny=${ny}`)
+  
   const json = await res.json()
+  console.log(json)
   let response_item = json.response.body.items.item
   
   let copiedItems = [...response_item]
