@@ -89,7 +89,7 @@ export const searchWeather = async () => {
   const dateFormat = year + month + date
 
   const airEl = document.querySelector('.air')
-  
+
   let time = today.getHours()
   time == 0 ? time = '00' : time.toString()
 
@@ -180,5 +180,7 @@ export const searchWeather = async () => {
   store.state.information = [...copiedItems]
   airEl.classList.remove('hide')
   store.state.loading = false
+  const weatherTitleEl = document.querySelector('.weather-title')
+  weatherTitleEl.classList.remove('hide')
 } 
  

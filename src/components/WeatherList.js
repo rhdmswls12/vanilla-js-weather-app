@@ -16,7 +16,7 @@ export default class WeatherList extends Component {
   render() {
     this.el.classList.add('weather-list')
     this.el.innerHTML = /* HTML */`
-      <div class="weather-title hide">
+      <div class="weather-title">
         <span>${weatherStore.state.searchText}</span>
         의 현재 날씨
       </div>
@@ -32,9 +32,10 @@ export default class WeatherList extends Component {
 
     const loaderEl = this.el.querySelector('.the-loader')
     const weatherTitleEl = this.el.querySelector('.weather-title')
+    weatherTitleEl.classList.add('hide')
 
     weatherStore.state.loading
-      ? loaderEl.classList.remove('hide') & weatherTitleEl.classList.remove('hide') 
+      ? loaderEl.classList.remove('hide') 
       : loaderEl.classList.add('hide') 
 
   }

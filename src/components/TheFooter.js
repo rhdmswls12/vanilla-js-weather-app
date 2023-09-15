@@ -9,7 +9,7 @@ export default class TheFooter extends Component {
   render() {
     this.el.innerHTML = /* HTML */`
       <div>
-        <a href="">GitHub Repository</a>
+        <a href="https://github.com/rhdmswls12/vanilla-js-weather-app">GitHub Repository</a>
       </div>
       <div>
         <a href="https://github.com/rhdmswls12">
