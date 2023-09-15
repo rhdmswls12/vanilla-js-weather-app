@@ -82,16 +82,37 @@ function dfs_xy_conv(code, v1, v2) {
 
 export const searchWeather = async () => {
   store.state.loading = true
-  const today = new Date()
-  const year = today.getFullYear().toString()
-  const month = (today.getMonth() + 1) > 9 ? today.getMonth() + 1 : '0'+ (today.getMonth() + 1)
-  const date = today.getDate() >= 10 ? today.getDate() : '0' + today.getDate() 
-  const dateFormat = year + month + date
 
+  let today = new Date()
+  let year = today.getFullYear()
+  let month = today.getMonth() + 1
+  let date = today.getDate()
+  let hours = today.getHours()
+  let minutes = today.getMinutes()
   const airEl = document.querySelector('.air')
 
-  let time = today.getHours()
-  time == 0 ? time = '00' : time.toString()
+  
+  if (minutes < 30) {
+    hours = hours - 1
+    if (hours < 0) {
+      today.setDate(today.getDate() - 1)
+      date = today.getDate()
+      month = today.getMonth() + 1
+      year = today.getFullYear()
+      hours = 23
+    }
+  }
+  if (hours < 10) {
+    hours = '0' + hours
+  }
+  if (minutes < 10) {
+    minutes = '0' + minutes
+  }
+  if (date < 10) {
+    date = '0' + date
+  }
+  month = (month < 10) ? '0' + month : month
+  
 
   // 위치 API
   const REST_API_KEY = 'cdc5b6a9678727fdaa8a73d9b2355814'
@@ -136,8 +157,9 @@ export const searchWeather = async () => {
   store.state.air = itemsForAir + ' ㎍/㎥'
   // 날씨 API
   const url = 'http://apis.data.go.kr/1360000/VilageFcstInfoService_2.0/getUltraSrtNcst'
-  
-  let baseTime = time + '00'
+  let dateFormat = year + '' + month + '' + date
+  let baseTime = hours + '00'
+  console.log(dateFormat, baseTime)
   const res = await fetch(`${url}?serviceKey=${serviceKey}&dataType=json&numOfRows=10&pageNo=1&base_date=${dateFormat}&base_time=${baseTime}&nx=${nx}&ny=${ny}`)
   
   const json = await res.json()
