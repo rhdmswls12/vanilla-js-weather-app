@@ -6,25 +6,24 @@ const store = new Store({
   air: 0,
   airState: '',
   loading: false,
-  sidoName: ''
+  sidoName: '',
+  defaultText: ''
 })
 
 export default store
 
-var RE = 6371.00877; // 지구 반경(km)
-var GRID = 5.0; // 격자 간격(km)
-var SLAT1 = 30.0; // 투영 위도1(degree)
-var SLAT2 = 60.0; // 투영 위도2(degree)
-var OLON = 126.0; // 기준점 경도(degree)
-var OLAT = 38.0; // 기준점 위도(degree)
-var XO = 43; // 기준점 X좌표(GRID)
-var YO = 136; // 기1준점 Y좌표(GRID)
-//
-// LCC DFS 좌표변환 ( code : "toXY"(위경도->좌표, v1:위도, v2:경도), "toLL"(좌표->위경도,v1:x, v2:y) )
-//
 
 
-function dfs_xy_conv(code, v1, v2) {
+export const dfs_xy_conv = (code, v1, v2) => {
+    var RE = 6371.00877; // 지구 반경(km)
+    var GRID = 5.0; // 격자 간격(km)
+    var SLAT1 = 30.0; // 투영 위도1(degree)
+    var SLAT2 = 60.0; // 투영 위도2(degree)
+    var OLON = 126.0; // 기준점 경도(degree)
+    var OLAT = 38.0; // 기준점 위도(degree)
+    var XO = 43; // 기준점 X좌표(GRID)
+    var YO = 136; // 기1준점 Y좌표(GRID)
+
     var DEGRAD = Math.PI / 180.0;
     var RADDEG = 180.0 / Math.PI;
 
@@ -80,38 +79,39 @@ function dfs_xy_conv(code, v1, v2) {
     return rs;
 }
 
+let today = new Date()
+let year = today.getFullYear()
+let month = today.getMonth() + 1
+let date = today.getDate()
+let hours = today.getHours()
+let minutes = today.getMinutes()
+
+if (minutes < 30) {
+  hours = hours - 1
+  if (hours < 0) {
+    today.setDate(today.getDate() - 1)
+    date = today.getDate()
+    month = today.getMonth() + 1
+    year = today.getFullYear()
+    hours = 23
+  }
+}
+if (hours < 10) {
+  hours = '0' + hours
+}
+if (minutes < 10) {
+  minutes = '0' + minutes
+}
+if (date < 10) {
+  date = '0' + date
+}
+month = (month < 10) ? '0' + month : month
+
 export const searchWeather = async () => {
   store.state.loading = true
 
-  let today = new Date()
-  let year = today.getFullYear()
-  let month = today.getMonth() + 1
-  let date = today.getDate()
-  let hours = today.getHours()
-  let minutes = today.getMinutes()
-  const airEl = document.querySelector('.air')
-
   
-  if (minutes < 30) {
-    hours = hours - 1
-    if (hours < 0) {
-      today.setDate(today.getDate() - 1)
-      date = today.getDate()
-      month = today.getMonth() + 1
-      year = today.getFullYear()
-      hours = 23
-    }
-  }
-  if (hours < 10) {
-    hours = '0' + hours
-  }
-  if (minutes < 10) {
-    minutes = '0' + minutes
-  }
-  if (date < 10) {
-    date = '0' + date
-  }
-  month = (month < 10) ? '0' + month : month
+  const airEl = document.querySelector('.air')
   
 
   // 위치 API
@@ -129,6 +129,7 @@ export const searchWeather = async () => {
 
   // 좌표 변환
   let rs = dfs_xy_conv("toXY",y, x)
+  console.log(rs)
   let nx = rs['x'] // 좌표값
   let ny = rs['y']
   console.log(nx, ny)
@@ -207,4 +208,112 @@ export const searchWeather = async () => {
   const weatherTitleEl = document.querySelector('.weather-title')
   weatherTitleEl.classList.remove('hide')
 } 
- 
+
+
+
+// 현재 위치 미세먼지 API
+
+
+function onGeoOk(position) {
+  const serviceKey = '6o3Wnt66GnG4n3tCN3ZgU7/NXUVbDtADL61rtkIrjAZxeiLTbYT9eGlB62yqp4Zw6LdshmB4JdaoDhYYAdeBiA=='
+
+  let lat = position.coords.latitude;
+  let lon = position.coords.longitude;
+
+  // 좌표 변환
+  let rs = dfs_xy_conv("toXY",lat, lon)
+  console.log(rs)
+  let nx = rs['x'] // 좌표값
+  let ny = rs['y']
+  console.log(nx, ny)
+
+  // 현재 위치 API
+  let address = []
+  let sidoName = ''
+  const REST_API_KEY = 'cdc5b6a9678727fdaa8a73d9b2355814'
+  axios.get(`https://dapi.kakao.com/v2/local/geo/coord2regioncode.json?x=${lon}&y=${lat}&input_coord=WGS84`,
+    {headers:{Authorization: `KakaoAK ${REST_API_KEY}`}}
+  )
+  .then (res => {
+    console.log(res.data.documents[0])
+    address = res.data.documents[0].address_name.split(' ')
+    sidoName = address[0].slice(0, 2)
+    store.state.sidoName = sidoName
+    store.state.defaultText = address[address.length - 1]
+    // 현재 위치 미세먼지 API
+    const urlForAir = 'http://apis.data.go.kr/B552584/ArpltnInforInqireSvc/getCtprvnRltmMesureDnsty?'
+    axios.get(`${urlForAir}serviceKey=${serviceKey}&returnType=json&sidoName=${sidoName}`)
+    .then(res => {
+      console.log(res.data.response.body.items[0])
+      let itemsForAir = res.data.response.body.items[0]['pm10Value']
+      if (itemsForAir <= 30) {
+        store.state.airState = '좋음'
+      } else if (itemsForAir <= 80) {
+        store.state.airState = '보통'
+      } else if (itemsForAir <= 150) {
+        store.state.airState = '나쁨'
+      } else if (itemsForAir == '-'){
+        store.state.airState = '수치 없음'
+      } else {
+        store.state.airState = '매우 나쁨'
+      }
+      store.state.air = itemsForAir + ' ㎍/㎥'
+    })
+  })
+
+  
+  
+  
+
+  // 현재 위치 날씨 API
+  const url = 'http://apis.data.go.kr/1360000/VilageFcstInfoService_2.0/getUltraSrtNcst'
+  let dateFormat = year + '' + month + '' + date
+  let baseTime = hours + '00'
+  console.log(dateFormat, baseTime)
+  axios.get(`${url}?serviceKey=${serviceKey}&dataType=json&numOfRows=10&pageNo=1&base_date=${dateFormat}&base_time=${baseTime}&nx=${nx}&ny=${ny}`)
+  .then(res => {
+    console.log(res.data.response.body.items.item)
+    let copiedItems = [...res.data.response.body.items.item]
+  if (copiedItems[0]['category'] == 'PTY') {
+    if (copiedItems[0]['obsrValue'] == '1') {
+      copiedItems[0]['obsrValue'] = '비'
+    } else if (copiedItems[0]['obsrValue'] == '2') {
+      copiedItems[0]['obsrValue'] = '비 또는 눈'
+    } else if (copiedItems[0]['obsrValue'] == '3') {
+      copiedItems[0]['obsrValue'] = '눈'
+    } else if (copiedItems[0]['obsrValue'] == '4') {
+      copiedItems[0]['obsrValue'] = '소나기'
+    } else {
+      copiedItems[0]['obsrValue'] = '없음'
+    }
+  }
+  if (copiedItems[1]['category'] == 'REH') {
+    copiedItems[1]['obsrValue'] += ' %' 
+  }
+  if (copiedItems[2]['category'] == 'RN1') {
+    copiedItems[2]['obsrValue'] += ' mm' 
+  }
+  if (copiedItems[3]['category'] == 'T1H') {
+    copiedItems[3]['obsrValue'] += ' ℃'
+  }
+  if (copiedItems[4]['category'] == 'UUU') {
+    copiedItems[4]['obsrValue'] += ' m/s' 
+  }
+  if (copiedItems[5]['category'] == 'VEC') {
+    copiedItems[5]['obsrValue'] += ' deg'
+  }
+  if (copiedItems[6]['category'] == 'VVV') {
+    copiedItems[6]['obsrValue'] += ' m/s'
+  }
+  if (copiedItems[7]['category'] == 'WSD') {
+    copiedItems[7]['obsrValue'] += ' m/s'
+  }
+  console.log(copiedItems)
+  store.state.information = [...copiedItems]
+  })
+  
+}
+function onGeoError() {
+  alert('위치 권한을 확인해주세요')
+}
+navigator.geolocation.getCurrentPosition(onGeoOk,onGeoError)

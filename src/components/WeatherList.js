@@ -12,12 +12,17 @@ export default class WeatherList extends Component {
     weatherStore.subscribe('loading', () => {
       this.render()
     })
+    weatherStore.subscribe('defaultText', () => {
+      this.render()
+    })
   }
   render() {
     this.el.classList.add('weather-list')
     this.el.innerHTML = /* HTML */`
       <div class="weather-title">
-        <span>${weatherStore.state.searchText}</span>
+        <span>${weatherStore.state.searchText
+          ? weatherStore.state.searchText 
+          : weatherStore.state.defaultText}</span>
         의 현재 날씨
       </div>
       <div class="weather-information"></div>
@@ -32,7 +37,7 @@ export default class WeatherList extends Component {
 
     const loaderEl = this.el.querySelector('.the-loader')
     const weatherTitleEl = this.el.querySelector('.weather-title')
-    weatherTitleEl.classList.add('hide')
+    // weatherTitleEl.classList.add('hide')
 
     weatherStore.state.loading
       ? loaderEl.classList.remove('hide') 

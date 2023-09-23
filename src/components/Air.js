@@ -1,5 +1,6 @@
 import { Component } from "../core/core";
 import weatherStore from '../store/weather';
+
 export default class Air extends Component {
   constructor() {
     super()
@@ -14,7 +15,7 @@ export default class Air extends Component {
     })
   }
   render() {
-    this.el.classList.add('air', 'hide')
+    this.el.classList.add('air')
     this.el.innerHTML = /* HTML */`
       <div class="air-information">
         <div class="title">
