@@ -215,6 +215,9 @@ export const searchWeather = async () => {
 
 
 function onGeoOk(position) {
+
+  store.state.loading = true
+
   const serviceKey = '6o3Wnt66GnG4n3tCN3ZgU7/NXUVbDtADL61rtkIrjAZxeiLTbYT9eGlB62yqp4Zw6LdshmB4JdaoDhYYAdeBiA=='
 
   let lat = position.coords.latitude;
@@ -311,7 +314,8 @@ function onGeoOk(position) {
   console.log(copiedItems)
   store.state.information = [...copiedItems]
   })
-  
+  console.log(store.state.loading)
+  store.state.loading = false
 }
 function onGeoError() {
   alert('위치 권한을 확인해주세요')
