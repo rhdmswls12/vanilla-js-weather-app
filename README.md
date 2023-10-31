@@ -30,8 +30,13 @@
 <div>
   사이트 접속 시 현재 위치의 날씨가 바로 출력됩니다.
 </div>
+<div display="flex">
+  <img src="https://github.com/rhdmswls12/vanilla-js-weather-app/assets/71330240/e6e6b2a2-b7d5-4b2b-bd49-22fc948a0379" width="400px" height="500px">
+<img src="https://github.com/rhdmswls12/vanilla-js-weather-app/assets/71330240/1715e96d-0b98-4d3a-9e8c-07a15d265b33" width="400px" height="500px">
+</div>
 
 ### 프로젝트 회고
 * 날씨 정보를 알기 위해 사용한 공공 데이터 포털의 단기 예보 API를 사용했습니다. 해당 API는 예보 발표 시간과 40분의 차이가 있어 실시간 날씨가 아니라는 점이 아쉬웠습니다.
+* 실시간으로 일주일 날씨를 예보하는 기능과 날씨에 따라 다른 애니메이션을 배경에 적용할 수 있도록 공부가 더 필요하다는 것을 느꼈습니다.
 * 추후에 안정적인 개발을 위해 최근에 배웠던 TypeScript를 적용하고자 합니다.
 
