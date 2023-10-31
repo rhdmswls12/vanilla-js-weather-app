@@ -2,7 +2,7 @@
 
 ![weather-app](https://github.com/rhdmswls12/vanilla-js-weather-app/assets/71330240/29308261-c218-4395-8eff-9a5b7ca52df4)
 
-배포 URL: <a href="https://vanilla-js-weather-app-tau.vercel.app/#/">날씨 알리미</a>
+배포 URL: <a href="https://vanilla-js-weather-app-tau.vercel.app/#/">날씨 알리미</a><br>
 레포지토리: <a href="https://github.com/rhdmswls12/vanilla-js-weather-app">vanilla-js-weather-app</a>
 
 ### 프로젝트 소개
@@ -26,7 +26,10 @@
 
 
 ### 프로젝트 사용 방법
-
+<img src="https://github.com/rhdmswls12/vanilla-js-weather-app/assets/71330240/5fdeb815-9fee-4e60-8beb-3a42656cd4b0" width="400px" height="500px">
+<div>
+  사이트 접속 시 현재 위치의 날씨가 바로 출력됩니다.
+</div>
 
 ### 프로젝트 회고
 * 날씨 정보를 알기 위해 사용한 공공 데이터 포털의 단기 예보 API를 사용했습니다. 해당 API는 예보 발표 시간과 40분의 차이가 있어 실시간 날씨가 아니라는 점이 아쉬웠습니다.
