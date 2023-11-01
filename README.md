@@ -38,8 +38,8 @@
 
 #### [위치 검색]
 <div display="flex">
-  <img src="https://github.com/rhdmswls12/vanilla-js-weather-app/assets/71330240/6c784ed1-3744-4af7-8c69-3edad41077b3" width="300px" height="350px">
-<img src="https://github.com/rhdmswls12/vanilla-js-weather-app/assets/71330240/40ae3508-984d-4be3-bf21-dd5fb5edd406" width="300px" height="350px">
+  <img src="https://github.com/rhdmswls12/vanilla-js-weather-app/assets/71330240/6c784ed1-3744-4af7-8c69-3edad41077b3" width="500px" height="600px">
+<img src="https://github.com/rhdmswls12/vanilla-js-weather-app/assets/71330240/40ae3508-984d-4be3-bf21-dd5fb5edd406" width="500px" height="600px">
 </div>
 
 * 검색하고자 하는 위치의 날씨를 '구' 혹은 '도로명' 등 주소 일부만으로 검색이 가능합니다.
